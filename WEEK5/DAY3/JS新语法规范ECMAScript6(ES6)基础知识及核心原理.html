@@ -771,4 +771,117 @@
 </div><div class="hljs-line"><span class="hljs-comment line-number">5.</span><span class="hljs-comment">// };</span>
 </div><div class="hljs-line"><span class="hljs-comment line-number">6.</span>
 </div><div class="hljs-line"><span class="hljs-comment line-number">7.</span><span class="hljs-keyword">let</span> fn = <span class="hljs-function">(<span class="hljs-params">i</span>)=&gt;</span> (n)=&gt; n + (++i);
+</div></code></pre>
+
+<h3 id="es6中的类和继承">ES6中的类和继承</h3>
+
+<blockquote>
+  <p>ES5中创建类和实例，以及如何禁止用户把类当做普通函数执行：<code>new.target</code></p>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><div class="hljs-line"><span class="hljs-comment line-number">1.</span><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Person</span>(<span class="hljs-params">name, age</span>) </span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">2.</span>    <span class="hljs-comment">//console.log(new.target);//=&gt;ES6新增加的语法,如果是通过NEW执行的,返回的结果是当前创建的类,如果是当做普通函数执行的,返回的是UNDEFINED</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">3.</span>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">new</span>.target === <span class="hljs-string">'undefined'</span>) {
+</div><div class="hljs-line"><span class="hljs-comment line-number">4.</span>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">SyntaxError</span>(<span class="hljs-string">`当前Person不能作为一个普通函数执行，请使用new Person来执行~~`</span>);
+</div><div class="hljs-line"><span class="hljs-comment line-number">5.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">6.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">7.</span>    <span class="hljs-comment">//=&gt;NEW执行的时候,THIS是当前类的实例,THIS.XXX=XXX是给当前实例增加的私有属性</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">8.</span>    <span class="hljs-keyword">this</span>.name = name;
+</div><div class="hljs-line"><span class="hljs-comment line-number">9.</span>    <span class="hljs-keyword">this</span>.age = age;
+</div><div class="hljs-line"><span class="hljs-comment line-number">10.</span>}
+</div><div class="hljs-line"><span class="hljs-comment line-number">11.</span><span class="hljs-comment">//=&gt;原型上存放的是公有的属性和方法:给创建的实例使用</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">12.</span>Person.prototype = {
+</div><div class="hljs-line"><span class="hljs-comment line-number">13.</span>    <span class="hljs-attr">constructor</span>: Person,
+</div><div class="hljs-line"><span class="hljs-comment line-number">14.</span>    <span class="hljs-attr">say</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">15.</span>        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`my name is <span class="hljs-subst">${<span class="hljs-keyword">this</span>.name}</span>,i am <span class="hljs-subst">${<span class="hljs-keyword">this</span>.age}</span> years old~`</span>);
+</div><div class="hljs-line"><span class="hljs-comment line-number">16.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">17.</span>};
+</div><div class="hljs-line"><span class="hljs-comment line-number">18.</span><span class="hljs-comment">//=&gt;把PERSON当做一个普通的对象,给对象设置的私有属性</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">19.</span>Person.study = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">20.</span>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`good good study,day day up~`</span>);
+</div><div class="hljs-line"><span class="hljs-comment line-number">21.</span>};
+</div><div class="hljs-line"><span class="hljs-comment line-number">22.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">23.</span><span class="hljs-keyword">var</span> p1 = <span class="hljs-keyword">new</span> Person(<span class="hljs-string">'王雪超'</span>, <span class="hljs-string">'80'</span>);
+</div><div class="hljs-line"><span class="hljs-comment line-number">24.</span>Person(<span class="hljs-string">'王雪超'</span>, <span class="hljs-string">'80'</span>);
+</div></code></pre>
+
+<blockquote>
+  <p>ES6中创建类</p>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><div class="hljs-line"><span class="hljs-comment line-number">1.</span><span class="hljs-comment">//console.log(Person);//=&gt;Uncaught ReferenceError: Person is not defined 不存在变量提升</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">2.</span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">3.</span>    <span class="hljs-keyword">constructor</span>(name = '珠峰培训', age = 9) {
+</div><div class="hljs-line"><span class="hljs-comment line-number">4.</span>        <span class="hljs-comment">//=&gt;给实例设置的私有属性</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">5.</span>        <span class="hljs-keyword">this</span>.name = name;
+</div><div class="hljs-line"><span class="hljs-comment line-number">6.</span>        <span class="hljs-keyword">this</span>.age = age;
+</div><div class="hljs-line"><span class="hljs-comment line-number">7.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">8.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">9.</span>    <span class="hljs-comment">//=&gt;直接在大括号中编写的方法都设置在类的原型上：ES6默认把CONSTRUCTOR的问题解决了,此时原型上的CONSTRUCTOR指向的就是PERSON</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">10.</span>    say() {
+</div><div class="hljs-line"><span class="hljs-comment line-number">11.</span>        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`my name is <span class="hljs-subst">${<span class="hljs-keyword">this</span>.name}</span>,i am <span class="hljs-subst">${<span class="hljs-keyword">this</span>.age}</span> years old~`</span>);
+</div><div class="hljs-line"><span class="hljs-comment line-number">12.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">13.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">14.</span>    <span class="hljs-comment">//=&gt;把PERSON当做普通对象设置属性和方法,只需要在设置的方法前面加STATIC即可</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">15.</span>    <span class="hljs-keyword">static</span> study() {
+</div><div class="hljs-line"><span class="hljs-comment line-number">16.</span>        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`good good study,day day up~`</span>);
+</div><div class="hljs-line"><span class="hljs-comment line-number">17.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">18.</span>}
+</div><div class="hljs-line"><span class="hljs-comment line-number">19.</span><span class="hljs-keyword">let</span> p1 = <span class="hljs-keyword">new</span> Person(<span class="hljs-string">'王雪超'</span>);
+</div><div class="hljs-line"><span class="hljs-comment line-number">20.</span><span class="hljs-comment">//Person();//=&gt;Uncaught TypeError: Class constructor Person cannot be invoked without 'new' =&gt;ES6中使用CLASS创建的类,天生自带NEW.TARGET的验证,不允许把创建的类当做普通函数执行</span>
+</div></code></pre>
+
+<blockquote>
+  <p>ES6中的继承</p>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><div class="hljs-line"><span class="hljs-comment line-number">1.</span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">2.</span>    <span class="hljs-keyword">constructor</span>(...ARG) {
+</div><div class="hljs-line"><span class="hljs-comment line-number">3.</span>        <span class="hljs-keyword">let</span> [x = <span class="hljs-number">0</span>,y = <span class="hljs-number">0</span>]=ARG;
+</div><div class="hljs-line"><span class="hljs-comment line-number">4.</span>        <span class="hljs-keyword">this</span>.x = x;
+</div><div class="hljs-line"><span class="hljs-comment line-number">5.</span>        <span class="hljs-keyword">this</span>.y = y;
+</div><div class="hljs-line"><span class="hljs-comment line-number">6.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">7.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">8.</span>    sum() {
+</div><div class="hljs-line"><span class="hljs-comment line-number">9.</span>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.x + <span class="hljs-keyword">this</span>.y;
+</div><div class="hljs-line"><span class="hljs-comment line-number">10.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">11.</span>}
+</div><div class="hljs-line"><span class="hljs-comment line-number">12.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">13.</span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Child</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Person</span> </span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">14.</span>    <span class="hljs-comment">//=&gt;创建CHILD类,并且让CHILD类继承了PERSON类:</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">15.</span>    <span class="hljs-comment">//1、把PERSON中的私有属性继承过来设置给了子类实例的私有属性</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">16.</span>    <span class="hljs-comment">//2、让子类实例的原型链上能够找到PERSON父类的原型(这样子类的实例就可以调用父类原型上的方法了)</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">17.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">18.</span>    <span class="hljs-comment">//-------------</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">19.</span>    <span class="hljs-comment">//=&gt;我们可以不写CONSTRUCTOR,浏览器默认会创建它,而且默认就把父类私有的属性继承过来了(而且把传给子类的参数值也传递给父类了)</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">20.</span>    <span class="hljs-comment">// constructor(...arg) {</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">21.</span>    <span class="hljs-comment">//     //=&gt;ARG:传递给子类的参数(数组) [剩余运算符]</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">22.</span>    <span class="hljs-comment">//     super(...arg);//=&gt;[展开运算符] 把ARG中每一项值展开,分别传递给父类方法 SUPPER(10,20,30)</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">23.</span>    <span class="hljs-comment">// }</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">24.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">25.</span>    <span class="hljs-comment">//------------</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">26.</span>    <span class="hljs-comment">//=&gt;很多时候我们不仅要继承父类私有的,还需要给子类增加一些而外私有的,此时就必须写CONSTRUCTOR,但是一定要在CONSTRUCTOR中的第一行写上SUPPER,否则会报错</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">27.</span>    <span class="hljs-comment">// constructor(...arg) {</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">28.</span>    <span class="hljs-comment">//     super(...arg);</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">29.</span>    <span class="hljs-comment">//</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">30.</span>    <span class="hljs-comment">//     let [,,z]=arg;</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">31.</span>    <span class="hljs-comment">//     this.z = z;</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">32.</span>    <span class="hljs-comment">// }</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">33.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">34.</span>    <span class="hljs-keyword">constructor</span>(x, y, z) {
+</div><div class="hljs-line"><span class="hljs-comment line-number">35.</span>        <span class="hljs-keyword">super</span>();<span class="hljs-comment">//&lt;=&gt;Person.prototype.constructor.call(this)</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">36.</span>        <span class="hljs-keyword">this</span>.z = z;
+</div><div class="hljs-line"><span class="hljs-comment line-number">37.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">38.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">39.</span>    fn() {
+</div><div class="hljs-line"><span class="hljs-comment line-number">40.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">41.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">42.</span>}
+</div><div class="hljs-line"><span class="hljs-comment line-number">43.</span><span class="hljs-keyword">let</span> c = <span class="hljs-keyword">new</span> Child(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>);
 </div></code></pre></div></body></html>
