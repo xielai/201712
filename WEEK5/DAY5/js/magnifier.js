@@ -32,7 +32,7 @@ let magnifierRender = (function () {
         bigImg.style.left = -curL * 3 + 'px';
         bigImg.style.top = -curT * 3 + 'px';
     };
-    
+
     //=>给SMALL-BOX的相关事件绑定方法
     let bindEvent = function () {
         smallBox.onmouseenter = function (e) {
