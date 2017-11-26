@@ -30,12 +30,6 @@ let treeRender = (function () {
         });
     };
 
-    // $menu.click(function(e){});
-    // $menu.bind('click',function(){});
-    //=>JQ中提供的事件委托方法(老版本使用的是LIVE方法)
-    // $menu.delegate('h3','click',function(e){});
-    // $menu.delegate('em','click',function(e){});
-
     return {
         init: function () {
             bindEvent();
