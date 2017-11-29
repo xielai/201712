@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>珠峰培训</title>
+    <link rel="stylesheet" href="css/reset.min.css">
+    <style>
+        html, body {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<script src="js/2-1.js"></script>
+<script>
+    var fn1 = function (e) {
+        console.log(1);
+    };
+    var fn2 = function (e) {
+        console.log(2);
+    };
+    var fn3 = function (e) {
+        console.log(3);
+    };
+    var fn4 = function (e) {
+        console.log(4);
+        off(document.body, 'click', fn1);
+        off(document.body, 'click', fn2);
+    };
+
+    on(document.body, 'click', fn1);
+    on(document.body, 'click', fn2);
+    on(document.body, 'click', fn3);
+    on(document.body, 'click', fn4);
+</script>
+</body>
+</html>
