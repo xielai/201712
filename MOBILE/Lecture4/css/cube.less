@@ -47,9 +47,11 @@ html, body {
   perspective: 2000px;
 
   .cubeBox {
+    cursor: move;
+    transition: .3s; //=>控制魔方在手动旋转的时候,有一个动过过渡效果
     transform-style: preserve-3d;
     transform: scale(.6) rotateX(-30deg) rotateY(45deg);
-    animation: cubeMove 5s linear infinite both;
+    //animation: cubeMove 5s linear infinite both;
 
     li {
       &:nth-child(1) {
