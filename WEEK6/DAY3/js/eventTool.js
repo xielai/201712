@@ -1,12 +1,28 @@
+'use strict';
+
 ~function () {
-    Function.prototype.myBind = function myBind(context = window, ...outer) {
-        if ('bind' in this) {
-            return this.bind(...arguments);
+    Function.prototype.myBind = function myBind() {
+        var _this = this;
+
+        for (var _len = arguments.length, outer = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            outer[_key - 1] = arguments[_key];
         }
-        return (...inner)=> this.apply(context, outer.concat(inner));
+
+        var context = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window;
+
+        if ('bind' in this) {
+            return this.bind.apply(this, arguments);
+        }
+        return function () {
+            for (var _len2 = arguments.length, inner = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                inner[_key2] = arguments[_key2];
+            }
+
+            return _this.apply(context, outer.concat(inner));
+        };
     };
 
-    let on = function (curEle, type, fn) {
+    var on = function on(curEle, type, fn) {
         if (document.addEventListener) {
             curEle.addEventListener(type, fn, false);
             return;
@@ -15,8 +31,8 @@
             curEle['pond' + type] = [];
             curEle.attachEvent('on' + type, run.myBind(curEle));
         }
-        let pondAry = curEle['pond' + type];
-        for (let i = 0; i < pondAry.length; i++) {
+        var pondAry = curEle['pond' + type];
+        for (var i = 0; i < pondAry.length; i++) {
             if (pondAry[i] === fn) {
                 return;
             }
@@ -24,15 +40,15 @@
         pondAry.push(fn);
     };
 
-    let off = function (curEle, type, fn) {
+    var off = function off(curEle, type, fn) {
         if (document.removeEventListener) {
             curEle.removeEventListener(type, fn, false);
             return;
         }
-        let pondAry = curEle['pond' + type];
+        var pondAry = curEle['pond' + type];
         if (!pondAry) return;
-        for (let i = 0; i < pondAry.length; i++) {
-            let itemFn = pondAry[i];
+        for (var i = 0; i < pondAry.length; i++) {
+            var itemFn = pondAry[i];
             if (itemFn === fn) {
                 pondAry[i] = null;
                 break;
@@ -40,7 +56,7 @@
         }
     };
 
-    let run = function (e) {
+    var run = function run(e) {
         e = e || window.event;
         if (!e.target) {
             e.target = e.srcElement;
@@ -54,10 +70,10 @@
                 e.cancelBubble = true;
             };
         }
-        let pondAry = this['pond' + e.type];
+        var pondAry = this['pond' + e.type];
         if (!pondAry) return;
-        for (let i = 0; i < pondAry.length; i++) {
-            let itemFn = pondAry[i];
+        for (var i = 0; i < pondAry.length; i++) {
+            var itemFn = pondAry[i];
             if (itemFn === null) {
                 pondAry.splice(i, 1);
                 i--;
