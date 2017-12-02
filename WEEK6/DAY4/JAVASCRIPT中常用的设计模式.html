@@ -1,0 +1,186 @@
+<!DOCTYPE html><html><head><title>JAVASCRIPT中常用的设计模式</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        
+                    
+
+<h2 id="javascript中常用的设计模式">JAVASCRIPT中常用的设计模式</h2>
+
+<p></p>
+
+
+
+<h3 id="学习各种设计模式有什么作用">学习各种设计模式有什么作用？</h3>
+
+<blockquote>
+  <p>[ 开发 ] <br>
+  开发效率高 <br>
+  利于团队协作</p>
+  
+  <p>[ 维护 ] <br>
+  有利于代码的升级改版 <br>
+  逻辑清晰，代码严谨，利于后期的维护</p>
+  
+  <p>[ 通用 ] <br>
+  我们依托设计模式可以实现组件化、模块化、插件化、框架化以及一些常用类库方法的编写</p>
+  
+  <p><code>技术语言发展路线</code> <br>
+  语言语法更新迭代之路（路漫漫而其修远兮） <br>
+  语法初步稳定阶段 -&gt; 研究核心语法和使用的早一批人 -&gt;封装各种类库和插件 -&gt;大量研究核心的开发人员…  -&gt;出现各种设计模式 -&gt;框架(VUE、REACT)</p>
+</blockquote>
+
+<h3 id="插件组件类库框架的区别">插件、组件、类库、框架的区别</h3>
+
+<blockquote>
+  <p>类库：提供一些真实项目开发中常用的方法（方法做了完善处理：兼容处理、细节优化），方便我们开发和维护 [ jQuery、Zepto… ]</p>
+  
+  <p>插件：把项目中某一部分进行插件封装（是具备具体的业务逻辑的，更加有针对性），以后再有类似的需求，直接导入插件即可，相关业务逻辑代码不需要自己在编写了 [ jquery.drag.js 、jquery.dialog.js、jquery.validate.min.js 、datepicker日历插件、echarts统计图插件、iscroll插件…]</p>
+  
+  <p>组件：类似于插件，但是插件一般只是把JS部分封装，组件不仅封装了JS部分，而且把CSS部分也封装了，以后再使用的时候，我们直接的按照文档使用说明引入CSS/JS，搭建对应的结构，什么都不用做功能自然就有了 [ swiper组件、bootstrap组件… ]</p>
+  
+  <p>框架：比上面的三个都要庞大，它不仅仅提供了很多常用的方法、而且也可以支持一些插件的扩展（可以把一些插件集成到框架中运行）、更重要的是提供了非常优秀的代码管理设计思想…  [ REACT、VUE、ANGULAR、REACT NATIVE… ]</p>
+</blockquote>
+
+<h3 id="js中常用的设计模式">JS中常用的设计模式</h3>
+
+<blockquote>
+  <p>单例设计模式、构造原型设计模式、发布订阅设计模式、promise设计模式…</p>
+</blockquote>
+
+<p><code>单例设计模式</code></p>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><div class="hljs-line"><span class="hljs-comment line-number">1.</span><span class="hljs-comment">//=&gt;单例模式：把实现当前这个模块所有的属性和方法汇总到同一个命名空间下（分组作用，避免了全局变量的污染）</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">2.</span><span class="hljs-keyword">let</span> exampleRender=(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">3.</span>    <span class="hljs-comment">//=&gt;实现当前模块具体业务逻辑的方法全部存放在闭包中</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">4.</span>    <span class="hljs-keyword">let</span> fn=<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">5.</span>        <span class="hljs-comment">//...</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">6.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">7.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">8.</span>    <span class="hljs-keyword">return</span> {
+</div><div class="hljs-line"><span class="hljs-comment line-number">9.</span>        <span class="hljs-attr">init</span>:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">10.</span>            <span class="hljs-comment">//=&gt;入口方法：控制当前模块具体的业务逻辑顺序</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">11.</span>            fn();
+</div><div class="hljs-line"><span class="hljs-comment line-number">12.</span>        }
+</div><div class="hljs-line"><span class="hljs-comment line-number">13.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">14.</span>})();
+</div><div class="hljs-line"><span class="hljs-comment line-number">15.</span>exampleRender.init();
+</div></code></pre>
+
+<blockquote>
+  <p>真实项目中，我们如果想要实现具体的业务逻辑需求，都可以依托于单例模式构建；我们把项目划分成各大板块或者模块，把实现同一个板块的方法放在一个独立的命名空间下，方便团队协作开发；</p>
+</blockquote>
+
+<p><code>构造原型模式：最贴近OOP面向对象编程思想的</code></p>
+
+<blockquote>
+  <p>以后真实项目中，不管是封装类库还是插件或者UI组件，基本上都是基于构造原型模式来开发的</p>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><div class="hljs-line"><span class="hljs-comment line-number">1.</span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tool</span></span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">2.</span>    <span class="hljs-keyword">constructor</span>(){
+</div><div class="hljs-line"><span class="hljs-comment line-number">3.</span>        <span class="hljs-keyword">this</span>.isCompatible=<span class="hljs-string">'addEventListener'</span> <span class="hljs-keyword">in</span> <span class="hljs-built_in">document</span>;<span class="hljs-comment">//=&gt;如果不兼容返回FALSE(IE6~8)</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">4.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">5.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">6.</span>    <span class="hljs-comment">//=&gt;挂载到原型上的方法</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">7.</span>    css(){
+</div><div class="hljs-line"><span class="hljs-comment line-number">8.</span>        <span class="hljs-comment">//...</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">9.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">10.</span>    <span class="hljs-comment">//=&gt;挂载到普通对象上的方法</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">11.</span>    <span class="hljs-keyword">static</span> distinct(){
+</div><div class="hljs-line"><span class="hljs-comment line-number">12.</span>        <span class="hljs-comment">//...</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">13.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">14.</span>}
+</div><div class="hljs-line"><span class="hljs-comment line-number">15.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">16.</span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Banner</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Tool</span></span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">17.</span>    <span class="hljs-keyword">constructor</span>(...arg){
+</div><div class="hljs-line"><span class="hljs-comment line-number">18.</span>        <span class="hljs-keyword">super</span>();
+</div><div class="hljs-line"><span class="hljs-comment line-number">19.</span>        <span class="hljs-keyword">this</span>.xxx=xxx;
+</div><div class="hljs-line"><span class="hljs-comment line-number">20.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">21.</span>    <span class="hljs-comment">//=&gt;挂载到子类原型上的方法</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">22.</span>    bindData(){
+</div><div class="hljs-line"><span class="hljs-comment line-number">23.</span>        <span class="hljs-keyword">this</span>.css();<span class="hljs-comment">//=&gt;把父类原型上的方法执行（子类继承了父类，那么子类的实例就可以调取父类原型上的方法了）</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">24.</span>        <span class="hljs-keyword">this</span>.distinct===<span class="hljs-literal">undefined</span>;<span class="hljs-comment">//=&gt;子类的实例只能调取父类原型上的方法，以及父类给实例提供的私有属性方法，但是父类做为普通对象加入的静态方法，子类的实例是无法调取的 (只有这样才可以调取使用：Tool.distinct())</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">25.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">26.</span>}
+</div></code></pre>
+
+<blockquote>
+  <p>我有三个类 A/B/C ，我想让C继承A和B</p>
+</blockquote>
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><div class="hljs-line"><span class="hljs-comment line-number">1.</span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span></span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">2.</span>    ...
+</div><div class="hljs-line"><span class="hljs-comment line-number">3.</span>}
+</div><div class="hljs-line"><span class="hljs-comment line-number">4.</span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span></span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">5.</span>    ...
+</div><div class="hljs-line"><span class="hljs-comment line-number">6.</span>}
+</div><div class="hljs-line"><span class="hljs-comment line-number">7.</span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">C</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">B</span></span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">8.</span>    ...
+</div><div class="hljs-line"><span class="hljs-comment line-number">9.</span>}
+</div></code></pre>
+
+<p><code>发布订阅设计模式：观察者模式</code></p>
+
+<blockquote>
+  <p>不同于单例和构造，发布订阅是小型设计模式，应用到某一个具体的需求中：凡是当到达某个条件之后要执行N多方法，我们都可以依托于发布订阅设计模式管理和规划我们的JS代码</p>
+  
+  <p>我们经常把发布订阅设计模式嵌套到其它的设计模式中</p>
+</blockquote>
+
+<p><code>promise设计模式</code></p>
+
+<blockquote>
+  <p>解决AJAX异步请求层级嵌套的问题</p>
+  
+  <p>它也是小型设计模式，目的是为了解决层级嵌套问题的，我们也会经常把它嵌套在其它的设计模式中运行</p>
+</blockquote>
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><div class="hljs-line"><span class="hljs-comment line-number">1.</span>$.ajax({
+</div><div class="hljs-line"><span class="hljs-comment line-number">2.</span>    <span class="hljs-attr">url</span>:<span class="hljs-string">'/A'</span>,
+</div><div class="hljs-line"><span class="hljs-comment line-number">3.</span>    <span class="hljs-attr">async</span>:<span class="hljs-literal">true</span>,<span class="hljs-comment">//=&gt;异步</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">4.</span>    success:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">result</span>)</span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">5.</span>        $.ajax({
+</div><div class="hljs-line"><span class="hljs-comment line-number">6.</span>            <span class="hljs-attr">url</span>:<span class="hljs-string">'/B'</span>,
+</div><div class="hljs-line"><span class="hljs-comment line-number">7.</span>            <span class="hljs-attr">async</span>:<span class="hljs-literal">true</span>,
+</div><div class="hljs-line"><span class="hljs-comment line-number">8.</span>            <span class="hljs-attr">success</span>:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">9.</span>                <span class="hljs-comment">//=&gt;还会有后续嵌套</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">10.</span>            }
+</div><div class="hljs-line"><span class="hljs-comment line-number">11.</span>        });     
+</div><div class="hljs-line"><span class="hljs-comment line-number">12.</span>    }
+</div><div class="hljs-line"><span class="hljs-comment line-number">13.</span>});
+</div></code></pre>
+
+<h3 id="发布订阅设计模式">发布订阅设计模式</h3>
+
+<blockquote>
+  <p>俗称叫做“观察者模式”</p>
+  
+  <p>实现思路和原理： <br>
+  1、我们先创建一个计划表（容器） <br>
+  2、后期需要做什么事情，我们都依次把需要处理的事情增加到计划表中 <br>
+  3、当符合某个条件的时候，我们只需要通知计划表中的方法按照顺序依次执行即可</p>
+</blockquote>
+
+<p><code>JQ中的发布订阅</code></p>
+
+<blockquote>
+  <p>JQ中提供了实现发布订阅设计模式的方法</p>
+</blockquote>
+
+
+
+<pre class="prettyprint with-line-number hljs-dark"><code class="language-javascript hljs"><div class="hljs-line"><span class="hljs-comment line-number">1.</span><span class="hljs-keyword">let</span> $plan = $.Callbacks();<span class="hljs-comment">//=&gt;创建一个计划表</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">2.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">3.</span><span class="hljs-keyword">let</span> fn = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">n,m</span>)</span>{
+</div><div class="hljs-line"><span class="hljs-comment line-number">4.</span>    <span class="hljs-comment">//=&gt;n=100 m=200</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">5.</span>}
+</div><div class="hljs-line"><span class="hljs-comment line-number">6.</span>$plan.add(fn);<span class="hljs-comment">//=&gt;向计划表中增加方法</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">7.</span>$plan.remove(fn);<span class="hljs-comment">//=&gt;从计划表中移除方法</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">8.</span>
+</div><div class="hljs-line"><span class="hljs-comment line-number">9.</span>$plan.fire(<span class="hljs-number">100</span>，<span class="hljs-number">200</span>);<span class="hljs-comment">//=&gt;通知计划表中所有的方法按照顺序执行；100 200会分别作为实参传递给每一个需要执行的方法；</span>
+</div></code></pre></div></body></html>
