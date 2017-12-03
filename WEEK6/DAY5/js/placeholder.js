@@ -44,7 +44,7 @@
         };
 
         //=>控制INPUT的输入行为(建议使用DOM2事件绑定:防止后期再其它的地方也需要通过KEYUP或者KEYDOWN行为处理其它的事情)
-        inputItem.onkeydown = inputItem.onkeyup = function () {
+        inputItem.onkeydown = inputItem.onkeyup = function (e) {
             var value = this.value,
                 spanTip = this.spanTip;
             spanTip.style.display = value.length > 0 ? 'none' : 'block';
