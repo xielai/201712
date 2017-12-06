@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>珠峰培训</title>
+    <!--DEV-->
+    <link rel="stylesheet/less" href="css/index.less">
+    <script src="js/less-2.5.3.min.js"></script>
+
+    <!--REM-->
+    <script>
+        ~function () {
+            let computed = function () {
+                //=>DES-W:设计稿宽度 DEV-W:设备的宽度
+                let desW = 640;
+                let devW = document.documentElement.clientWidth;
+                if (devW >= 640) {
+                    document.documentElement.style.fontSize = '100px';
+                    return;
+                }
+                document.documentElement.style.fontSize = devW / desW * 100 + 'px';
+            };
+            computed();
+            window.addEventListener('resize', computed, false);
+        }();
+    </script>
+</head>
+<body>
+<main class="mainBox">
+    <!--LOADING-->
+    <section class="loadingBox">
+        <div class="title">
+            <h1>珠峰培训</h1>
+            <h2>H5场景的交互型简历</h2>
+        </div>
+        <div class="progress">
+            <div class="run"></div>
+        </div>
+    </section>
+
+    <!--PHONE-->
+    <section class="phoneBox">
+
+    </section>
+
+    <!--MESSAGE-->
+    <section class="messageBox">
+
+    </section>
+
+    <!--CUBE-->
+    <section class="cubeBox">
+
+    </section>
+
+    <!--DETAIL-->
+    <section class="detailBox">
+
+    </section>
+</main>
+
+<!--IMPORT JS-->
+<script src="js/zepto.min.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>
