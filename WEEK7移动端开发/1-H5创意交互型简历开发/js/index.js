@@ -1,5 +1,5 @@
 /*--LOADING--*/
-let loadingRender = (function () {
+let loadingRender = (function ($) {
     let $loadingBox = $('.loadingBox'),
         $run = $loadingBox.find('.run');
 
@@ -39,17 +39,83 @@ let loadingRender = (function () {
             computed();
         }
     }
-})();
+})(Zepto);
 
 /*--PHONE--*/
-let phoneRender = (function () {
-    let $phoneBox = $('.phoneBox');
-    
+let phoneRender = (function ($) {
+    let $phoneBox = $('.phoneBox'),
+        $time = $phoneBox.find('.time'),
+        $listen = $phoneBox.find('.listen'),
+        $listenTouch = $listen.find('.touch'),
+        $detail = $phoneBox.find('.detail'),
+        $detailTouch = $detail.find('.touch');
+
+    let audioBell = $('#audioBell')[0],
+        audioSay = $('#audioSay')[0];
+
+    let $phonePlan = $.Callbacks();
+
+    //=>控制盒子的显示隐藏
+    $phonePlan.add(function () {
+        $listen.remove();
+        $detail.css('transform', 'translateY(0)');
+    });
+
+    //=>控制SAY播放
+    $phonePlan.add(function () {
+        audioBell.pause();
+        audioSay.play();
+        $time.css('display', 'block');
+
+        //=>随时计算播放时间
+        let sayTimer = setInterval(()=> {
+            //=>总时间和已经播放时间:单位秒
+            let duration = audioSay.duration,
+                current = audioSay.currentTime;
+            let minute = Math.floor(current / 60),
+                second = Math.floor(current - minute * 60);
+            minute < 10 ? minute = '0' + minute : null;
+            second < 10 ? second = '0' + second : null;
+            $time.html(`${minute}:${second}`);
+
+            //=>播放结束
+            if (current >= duration) {
+                clearInterval(sayTimer);
+                enterNext();
+            }
+        }, 1000);
+    });
+
+    //=>DETAIL-TOUCH
+    $phonePlan.add(()=>$detailTouch.tap(enterNext));
+
+    //=>进入下一个区域(MESSAGE)
+    let enterNext = function () {
+        audioSay.pause();
+        $phoneBox.remove();
+        messageRender.init();
+    };
+
     return {
         init: function () {
             $phoneBox.css('display', 'block');
+
+            //=>控制BELL播放
+            audioBell.play();
+
+            //=>LISTEN-TOUCH
+            $listenTouch.tap($phonePlan.fire);
         }
     }
-})();
+})(Zepto);
+
+/*--MESSAGE--*/
+let messageRender = (function ($) {
+    return {
+        init: function () {
+
+        }
+    }
+})(Zepto);
 
 phoneRender.init();
