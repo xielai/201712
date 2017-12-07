@@ -111,11 +111,13 @@ let phoneRender = (function ($) {
 
 /*--MESSAGE--*/
 let messageRender = (function ($) {
+    let $messageBox = $('.messageBox');
+
     return {
         init: function () {
-
+            $messageBox.css('display', 'block');
         }
     }
 })(Zepto);
 
-phoneRender.init();
+messageRender.init();

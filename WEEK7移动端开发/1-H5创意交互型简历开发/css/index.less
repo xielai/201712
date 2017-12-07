@@ -191,6 +191,117 @@ html, body {
   }
 }
 
+/*--MESSAGE--*/
+.messageBox {
+  background: #EAEAEA;
+
+  .talkBox {
+    margin-top: .2rem;
+    transition: .3s;
+
+    li {
+      position: relative;
+      max-width: 3.6rem;
+      margin-bottom: .4rem;
+      padding: .25rem;
+      line-height: .4rem;
+      font-size: .26rem;
+      border-radius: .1rem;
+
+      //=>init position
+      opacity: 0;
+      transition: .3s;
+      transform: translateY(1rem);
+
+      img {
+        position: absolute;
+        top: 0;
+        width: .82rem;
+        height: .82rem;
+        border-radius: 50%;
+      }
+
+      i {
+        position: absolute;
+        top: .2rem;
+        width: .1rem;
+        height: .2rem;
+      }
+
+      &.student {
+        float: left;
+        margin-left: 1.25rem;
+        background: #FFF;
+        border: .02rem solid #CACACA;
+
+        img {
+          left: -1rem;
+        }
+
+        i {
+          left: -.1rem;
+          background: url("../img/zf_messageArrow1.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+
+      &.teacher {
+        float: right;
+        margin-right: 1.25rem;
+        background: #A2E45C;
+        border: .02rem solid #96B474;
+
+        img {
+          right: -1rem;
+        }
+
+        i {
+          right: -.1rem;
+          background: url("../img/zf_messageArrow2.png") no-repeat;
+          background-size: 100% 100%;
+        }
+      }
+    }
+  }
+
+  .keyBord {
+    position: absolute;
+    left: 0;
+    bottom: -.54rem;
+    width: 100%;
+    height: 5.16rem;
+    background: url("../img/zf_messageKeyboard.png") no-repeat;
+    background-size: 100% 100%;
+
+    //=>init position
+    transition: .3s;
+    transform: translateY(3.7rem);
+
+    span {
+      display: none;
+      position: absolute;
+      top: .35rem;
+      left: .9rem;
+      width: 4rem;
+      height: .4rem;
+      line-height: .4rem;
+      font-size: .25rem;
+      overflow: hidden;
+    }
+
+    .submit {
+      display: none;
+      position: absolute;
+      right: .1rem;
+      bottom: .6rem;
+      width: 1.47rem;
+      height: .74rem;
+      background: url("../img/zf_messageChat.png") no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+}
+
 
 
 
