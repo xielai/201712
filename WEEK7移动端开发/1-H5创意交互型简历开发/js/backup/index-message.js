@@ -133,20 +133,30 @@ let messageRender = (function ($) {
                 opacity: 1,
                 transform: 'translateY(0)'
             });
+            //=>当第三条完全展示后立即调取出键盘(STEP===2 && 当前LI显示的动画已经完成)
             if (step === 2) {
+                //=>transitionend:当前元素正在运行的CSS3过渡动画已经完成,就会触发这个事件(有几个元素样式需要改变,就会被触发执行几次)
                 $cur.one('transitionend', ()=> {
+                    //=>one:JQ中的事件绑定方法,想要实现当前事件只绑定一次,触发一次后,给事件绑定的方法自动移除
                     $keyBord.css('transform', 'translateY(0)')
                         .one('transitionend', textMove);
                 });
                 clearInterval(autoTimer);
                 return;
             }
+
+            //=>从第五条开始,每当展示一个LI,都需要让UL整体上移
             if (step >= 4) {
                 offset += -$cur[0].offsetHeight;
                 $talkBox.css(`transform`, `translateY(${offset}px)`);
             }
+
+            //=>已经把LI都显示了:结束动画,进入到下一个区域即可
             if (step >= $talkList.length - 1) {
                 clearInterval(autoTimer);
+
+                //=>进入到下一个环节之前给设置一个延迟:
+                //让用户把最后一条数据读取完整
                 let delayTimer = setTimeout(()=> {
                     musicAudio.pause();
                     $messageBox.remove();
@@ -165,12 +175,14 @@ let messageRender = (function ($) {
             n = -1;
         timer = setInterval(()=> {
             if (n >= text.length) {
+                //=>打印机效果完成:让发送按钮显示(并且给其绑定点击事件)
                 clearInterval(timer);
                 $keyBordText.html(text);
+
                 $submit.css('display', 'block').tap(()=> {
                     $keyBordText.css('display', 'none');
                     $keyBord.css('transform', 'translateY(3.7rem)');
-                    $plan.fire();
+                    $plan.fire();//=>此时计划表中只有一个方法,重新通知计划表中的这个方法执行
                 });
                 return;
             }
@@ -189,73 +201,12 @@ let messageRender = (function ($) {
 })(Zepto);
 
 /*--CUBE--*/
-//=>只要在移动端浏览器中实现滑动操作,都需要把浏览器默认的滑动行为(例如:页卡切换等)禁止掉
-$(document).on('touchstart touchmove touchend', function (e) {
-    e.preventDefault();
-});
 let cubeRender = (function () {
-    let $cubeBox = $('.cubeBox'),
-        $box = $cubeBox.find('.box');
-
-    let touchBegin = function (e) {
-        //=>this:box
-        let point = e.changedTouches[0];
-        $(this).attr({
-            strX: point.clientX,
-            strY: point.clientY,
-            isMove: false,
-            changeX: 0,
-            changeY: 0
-        });
-    };
-
-    let touching = function (e) {
-        let point = e.changedTouches[0],
-            $this = $(this);
-        let changeX = point.clientX - parseFloat($this.attr('strX')),
-            changeY = point.clientY - parseFloat($this.attr('strY'));
-        if (Math.abs(changeX) > 10 || Math.abs(changeY) > 10) {
-            $this.attr({
-                isMove: true,
-                changeX: changeX,
-                changeY: changeY
-            });
-        }
-    };
-
-    let touchEnd = function (e) {
-        let point = e.changedTouches[0],
-            $this = $(this);
-        let isMove = $this.attr('isMove'),
-            changeX = parseFloat($this.attr('changeX')),
-            changeY = parseFloat($this.attr('changeY')),
-            rotateX = parseFloat($this.attr('rotateX')),
-            rotateY = parseFloat($this.attr('rotateY'));
-        if (isMove === 'false') return;
-
-        rotateX = rotateX - changeY / 3;
-        rotateY = rotateY + changeX / 3;
-        $this.css(`transform`, `scale(.6) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`).attr({
-            rotateX: rotateX,
-            rotateY: rotateY
-        });
-    };
-
     return {
         init: function () {
-            $cubeBox.css('display', 'block');
 
-            //=>事件绑定实现相关效果
-            $box.attr({
-                rotateX: -30,
-                rotateY: 45
-            }).on({
-                touchstart: touchBegin,
-                touchmove: touching,
-                touchend: touchEnd
-            });
         }
     }
 })();
 
-cubeRender.init();
+messageRender.init();
