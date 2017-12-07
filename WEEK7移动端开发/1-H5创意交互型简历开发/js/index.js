@@ -111,13 +111,102 @@ let phoneRender = (function ($) {
 
 /*--MESSAGE--*/
 let messageRender = (function ($) {
-    let $messageBox = $('.messageBox');
+    let $messageBox = $('.messageBox'),
+        $talkBox = $messageBox.find('.talkBox'),
+        $talkList = $talkBox.find('li'),
+        $keyBord = $messageBox.find('.keyBord'),
+        $keyBordText = $keyBord.find('span'),
+        $submit = $keyBord.find('.submit'),
+        musicAudio = $('#musicAudio')[0];
+    let $plan = $.Callbacks();
+
+    //=>控制消息列表逐条显示
+    let step = -1,
+        autoTimer = null,
+        interval = 1500,
+        offset = 0;
+    $plan.add(()=> {
+        autoTimer = setInterval(()=> {
+            step++;
+            let $cur = $talkList.eq(step);
+            $cur.css({
+                opacity: 1,
+                transform: 'translateY(0)'
+            });
+            //=>当第三条完全展示后立即调取出键盘(STEP===2 && 当前LI显示的动画已经完成)
+            if (step === 2) {
+                //=>transitionend:当前元素正在运行的CSS3过渡动画已经完成,就会触发这个事件(有几个元素样式需要改变,就会被触发执行几次)
+                $cur.one('transitionend', ()=> {
+                    //=>one:JQ中的事件绑定方法,想要实现当前事件只绑定一次,触发一次后,给事件绑定的方法自动移除
+                    $keyBord.css('transform', 'translateY(0)')
+                        .one('transitionend', textMove);
+                });
+                clearInterval(autoTimer);
+                return;
+            }
+
+            //=>从第五条开始,每当展示一个LI,都需要让UL整体上移
+            if (step >= 4) {
+                offset += -$cur[0].offsetHeight;
+                $talkBox.css(`transform`, `translateY(${offset}px)`);
+            }
+
+            //=>已经把LI都显示了:结束动画,进入到下一个区域即可
+            if (step >= $talkList.length - 1) {
+                clearInterval(autoTimer);
+
+                //=>进入到下一个环节之前给设置一个延迟:
+                //让用户把最后一条数据读取完整
+                let delayTimer = setTimeout(()=> {
+                    musicAudio.pause();
+                    $messageBox.remove();
+                    cubeRender.init();
+                    clearTimeout(delayTimer);
+                }, interval);
+            }
+        }, interval);
+    });
+
+    //=>控制文字及其打印机效果
+    let textMove = function () {
+        let text = $keyBordText.html();
+        $keyBordText.css('display', 'block').html('');
+        let timer = null,
+            n = -1;
+        timer = setInterval(()=> {
+            if (n >= text.length) {
+                //=>打印机效果完成:让发送按钮显示(并且给其绑定点击事件)
+                clearInterval(timer);
+                $keyBordText.html(text);
+
+                $submit.css('display', 'block').tap(()=> {
+                    $keyBordText.css('display', 'none');
+                    $keyBord.css('transform', 'translateY(3.7rem)');
+                    $plan.fire();//=>此时计划表中只有一个方法,重新通知计划表中的这个方法执行
+                });
+                return;
+            }
+            n++;
+            $keyBordText[0].innerHTML += text.charAt(n);
+        }, 100);
+    };
 
     return {
         init: function () {
             $messageBox.css('display', 'block');
+            musicAudio.play();
+            $plan.fire();
         }
     }
 })(Zepto);
+
+/*--CUBE--*/
+let cubeRender = (function () {
+    return {
+        init: function () {
+
+        }
+    }
+})();
 
 messageRender.init();
