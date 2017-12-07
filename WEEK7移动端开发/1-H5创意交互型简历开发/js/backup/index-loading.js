@@ -1,4 +1,3 @@
-/*--LOADING--*/
 let loadingRender = (function () {
     let $loadingBox = $('.loadingBox'),
         $run = $loadingBox.find('.run');
@@ -25,6 +24,7 @@ let loadingRender = (function () {
     let runFn = function () {
         $run.css('width', cur / total * 100 + '%');
         if (cur >= total) {
+            //=>需要延迟的图片都加载成功了:进入到下一个区域(设置一个缓冲等待时间,当加载完成,让用户看到加载完成的效果,再进入到下一个区域)
             let delayTimer = setTimeout(()=> {
                 $loadingBox.remove();
                 phoneRender.init();
@@ -35,21 +35,20 @@ let loadingRender = (function () {
 
     return {
         init: function () {
+            //=>我们在CSS中把所有区域的DISPLAY都设置为NONE,以后开发的时候,开发哪个区域,我们就执行哪个区域的INIT方法,在这个方法中首先控制当前区域展示(开发哪个区域,哪个区域展示,其它区域都是隐藏的)
             $loadingBox.css('display', 'block');
             computed();
         }
     }
 })();
 
-/*--PHONE--*/
 let phoneRender = (function () {
-    let $phoneBox = $('.phoneBox');
-    
     return {
         init: function () {
-            $phoneBox.css('display', 'block');
+
         }
     }
 })();
 
-phoneRender.init();
+
+loadingRender.init();

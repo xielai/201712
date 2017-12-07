@@ -7,22 +7,26 @@ html {
 }
 
 html, body {
+  position: relative;
   height: 100%;
   overflow: hidden;
   background: #F4F4F4;
+  z-index: -4;
 }
 
 .mainBox {
+  position: relative;
   margin: 0 auto;
   max-width: 640px;
   height: 100%;
   background: #FFF;
   overflow: hidden;
+  z-index: -3;
 }
 
 .loadingBox, .phoneBox, .messageBox, .cubeBox, .detailBox {
   display: none;
-  position: relative; //=>让当前区域中的后代元素都相对于本区域定位
+  position: relative;
   height: 100%;
   overflow: hidden;
 }
@@ -66,7 +70,7 @@ html, body {
     width: unit(@w, rem);
     height: unit(@h, rem);
     background: #FFF;
-    border-radius: unit(@h/2, rem); //=>圆角值是高度一半:左右是圆的,上下是直的
+    border-radius: unit(@h/2, rem);
 
     .run {
       position: absolute;
@@ -75,8 +79,7 @@ html, body {
       width: 0;
       height: unit(@h, rem);
       border-radius: unit(@h/2, rem);
-
-      transition: .3s; //=>在JS中控制WIDTH变化的时候有一个些许的动画
+      transition: .3s;
 
       background: -webkit-linear-gradient(left bottom, #5CB85C 0%, #5CB85C 25%, #74C274 25%, #74C274 50%, #5CB85C 50%, #5CB85C 75%, #74C274 75%, #74C274 100%);
       background-size: unit(@h, rem) unit(@h, rem);
@@ -94,15 +97,105 @@ html, body {
   }
 }
 
-/*
- * 移动端开发的时候，我们使用的大部分CSS3样式属性，都需要写两套：
- *  -webkit-xxx:
- *  xxx:
- *
- * 加前缀的一定要在前面,不加前缀的在后面(顺序不能乱),只有这样才能适配基本的IOS和安卓系统
- *
- * transition、animation、@keyframes、transform、gradient、flex..
-*/
+/*--PHONE--*/
+.phoneBox {
+  background: url("../img/zf_phoneBg.jpg") no-repeat;
+  background-size: cover;
+  z-index: -2;
+
+  .header {
+    position: absolute;
+    top: .5rem;
+    left: 50%;
+    margin-left: unit(-2.62/2, rem);
+    width: 2.62rem;
+
+    .logo {
+      display: block;
+      width: 100%;
+      height: 1.25rem;
+    }
+
+    .time {
+      display: none;
+      margin-top: .1rem;
+      line-height: .3rem;
+      text-align: center;
+      color: #FFF;
+      font-size: .3rem;
+      letter-spacing: .05rem;
+    }
+  }
+
+  .listen {
+    position: absolute;
+    bottom: .3rem;
+    left: 50%;
+    margin-left: unit(-5.2/2, rem);
+    width: 5.2rem;
+    height: 3.6rem;
+    background: url("../img/zf_phoneListen.png") no-repeat;
+    background-size: 100% 100%;
+
+    .touch {
+      position: absolute;
+      right: -.06rem;
+      bottom: .48rem;
+      z-index: 10;
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+
+    .move {
+      .touch;
+      z-index: -1;
+      box-sizing: border-box;
+      border: .03rem solid #0F0;
+      border-radius: 50%;
+      animation: listenTouchMove 1s linear infinite both;
+    }
+  }
+
+  .detail {
+    position: absolute;
+    bottom: .3rem;
+    left: 50%;
+    margin-left: unit(-5.2/2, rem);
+    width: 5.2rem;
+    height: 6.59rem;
+    background: url("../img/zf_phoneDetail.png") no-repeat;
+    background-size: 100% 100%;
+
+    //=>init position
+    transition: .3s;
+    transform: translateY(6.89rem);
+
+    .touch {
+      position: absolute;
+      bottom: .28rem;
+      left: 50%;
+      margin-left: unit(-1.6/2, rem);
+      z-index: 10;
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+  }
+}
+
+@keyframes listenTouchMove {
+  0% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+
+
+
+
+
 
 
 
