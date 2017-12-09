@@ -292,6 +292,14 @@ let detailRender = (function () {
             $makisuBox.makisu('close');
         }
 
+        //=>给当前活动块设置ID,其它块移除ID
+        [].forEach.call(slideAry, (item, index)=> {
+            if (index === activeIndex) {
+                item.id = 'page' + (activeIndex + 1);
+                return;
+            }
+            item.id = null;
+        });
     };
 
     return {
@@ -320,3 +328,19 @@ let detailRender = (function () {
 })();
 
 detailRender.init(1);
+
+/*
+ * 基于SWIPER实现每一个页面的动画
+ * 1、滑到某一个页面的时候，给当前这个页面设置一个ID，例如：滑动到第二个页面，我们给其设置ID=PAGE2
+ * 2、当滑出这个页面的时候，我们把之前设置的ID移除掉
+ * 3、我们把当前页面中元素需要的动画效果全部写在指定的ID下
+ *
+ *  #page2 h2{
+ *      animation:xxx 1s ...
+ *  }
+ * 
+ * 细节处理
+ * 1、我们是基于ANIMATE.CSS帧动画库完成的动画
+ * 2、我们让需要运动的元素初始样式：OPACITY=0（开始是隐藏的）
+ * 3、当设置ID让其运动的时候，我们自己在动画公式完成的时候，让其透明度为1
+ */
