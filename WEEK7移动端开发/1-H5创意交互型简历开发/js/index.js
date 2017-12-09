@@ -270,6 +270,33 @@ let detailRender = (function () {
         $cubeBox = $('.cubeBox'),
         $returnLink = $detailBox.find('.returnLink'),
         swipeExample = null;
+    let $makisuBox = $('#makisuBox');
+
+    let change = function (example) {
+        //example.activeIndex //=>当前活动块的索引
+        //example.slides //=>数组,存储了当前所有活动块
+        //example.slides[example.activeIndex] //=>当前活动块
+        let {slides:slideAry, activeIndex}=example;
+
+        //=>PAGE1单独处理
+        if (activeIndex === 0) {
+            $makisuBox.makisu({
+                selector: 'dd',
+                overlap: 0.6,
+                speed: 0.8
+            });
+            $makisuBox.makisu('open');
+        } else {
+            $makisuBox.makisu({
+                selector: 'dd',
+                overlap: 0,
+                speed: 0
+            });
+            $makisuBox.makisu('close');
+        }
+
+
+    };
 
     return {
         init: function (index = 0) {
@@ -286,7 +313,9 @@ let detailRender = (function () {
                 //=>不存在实例的情况下我们初始化,如果已经初始化过了,下一次直接运动到具体的位置即可,不需要重新的初始化
                 swipeExample = new Swiper('.swiper-container', {
                     //loop: true, //=>如果我们采用的切换效果是3D的,最好不要设置无缝衔接循环切换,在部分安卓机中,SWIPER这块的处理是有一些BUG的
-                    effect: 'coverflow'
+                    effect: 'coverflow',
+                    onInit: change,
+                    onTransitionEnd: change
                 });
             }
 
