@@ -189,7 +189,6 @@ let messageRender = (function ($) {
 })(Zepto);
 
 /*--CUBE--*/
-//=>只要在移动端浏览器中实现滑动操作,都需要把浏览器默认的滑动行为(例如:页卡切换等)禁止掉
 $(document).on('touchstart touchmove touchend', function (e) {
     e.preventDefault();
 });
@@ -254,6 +253,45 @@ let cubeRender = (function () {
                 touchmove: touching,
                 touchend: touchEnd
             });
+
+            //=>每一个页面的点击操作
+            $box.find('li').tap(function () {
+                $cubeBox.css('display', 'none');
+                let index = $(this).index();
+                detailRender.init(index);
+            });
+        }
+    }
+})();
+
+/*--DETAIL--*/
+let detailRender = (function () {
+    let $detailBox = $('.detailBox'),
+        $cubeBox = $('.cubeBox'),
+        $returnLink = $detailBox.find('.returnLink'),
+        swipeExample = null;
+
+    return {
+        init: function (index = 0) {
+            $detailBox.css('display', 'block');
+
+            //=>INIT SWIPER
+            if (!swipeExample) {
+                //=>RETURN
+                $returnLink.tap(()=> {
+                    $detailBox.css('display', 'none');
+                    $cubeBox.css('display', 'block');
+                });
+
+                //=>不存在实例的情况下我们初始化,如果已经初始化过了,下一次直接运动到具体的位置即可,不需要重新的初始化
+                swipeExample = new Swiper('.swiper-container', {
+                    //loop: true, //=>如果我们采用的切换效果是3D的,最好不要设置无缝衔接循环切换,在部分安卓机中,SWIPER这块的处理是有一些BUG的
+                    effect: 'coverflow'
+                });
+            }
+
+            index = index > 5 ? 5 : index;
+            swipeExample.slideTo(index, 0);//=>运动到指定索引的SLIDE位置,第二个参数是SPEED,我们设置零是让其立即运动到指定位置
         }
     }
 })();
