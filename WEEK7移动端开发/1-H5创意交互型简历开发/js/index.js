@@ -325,4 +325,4 @@ let detailRender = (function () {
     }
 })();
 
-cubeRender.init();
+detailRender.init(1);

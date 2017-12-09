@@ -394,6 +394,7 @@ html, body {
     position: relative;
     height: 100%;
     overflow: hidden;
+    font-family: Microsoft JhengHei;
   }
 
   /*PAGE1*/
@@ -464,6 +465,34 @@ html, body {
   /*PAGE2*/
   .page2 {
     background: #FFF9C1;
+
+    h2 {
+      position: absolute;
+      left: 0;
+      top: .8rem;
+      width: 100%;
+      line-height: .9rem;
+      text-align: center;
+      font-size: .6rem;
+      font-weight: normal;
+    }
+
+    img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -.5rem 0 0 -.5rem;
+      width: 1rem;
+      height: 1rem;
+
+      //&:nth-child(1) {} //=>.page2 img:nth-child(1) 获取PAGE2下第一个子元素(并且第一个子元素的标签需要是IMG)
+      //&:nth-of-type(1) {} //=>.page2 img:nth-of-type(1) 首先获取PAGE2中所有的IMG,然后再获取所有IMG中的第一个
+      &:nth-last-of-type(1) {
+        margin: unit(-1.7/2, rem) 0 0 unit(-1.32/2, rem);
+        width: 1.32rem;
+        height: 1.7rem;
+      }
+    }
   }
 
   /*PAGE3*/
