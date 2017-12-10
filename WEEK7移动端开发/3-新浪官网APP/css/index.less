@@ -1,0 +1,95 @@
+@import "reset";
+@import "swiper";
+@import "font";
+@import (reference) "common";
+
+html {
+  font-size: 100px; /*640PX：1REM=100PX*/
+}
+
+html, body {
+  background: #F4F4F4;
+  overflow-x: hidden;
+}
+
+.mainBox {
+  margin: 0 auto;
+  max-width: 640px;
+  background: #FFF;
+}
+
+/*--HEADER--*/
+.headerBox {
+  /*BASE*/
+  .baseBox {
+    @H: 1rem;
+    padding: 0 .2rem;
+    height: @H;
+    background: @blue;
+
+    h1 {
+      float: left;
+      width: .8rem;
+      height: @H;
+      line-height: @H;
+      font-size: 0;
+
+      a {
+        color: @white;
+        font-size: .8rem;
+      }
+    }
+
+    .weather, .menu, .person {
+      float: right;
+      margin-left: .32rem;
+      width: .44rem;
+      height: @H;
+      line-height: @H;
+      font-size: .44rem;
+      color: @white;
+    }
+
+    .weather {
+      background: url("../images/cloud.gif") no-repeat center center;
+      background-size: 100%;
+    }
+  }
+
+  /*NAV*/
+  .navBox {
+    padding: 0;
+    height: 0; //=>目标值(PADDING:.16REM HEIGHT:1.28REM)
+    overflow: hidden;
+    .transition;
+
+    a {
+      float: left;
+      //width: unit(100/6, %);
+      width: 16%;
+      height: .64rem;
+      line-height: .64rem;
+      text-align: center;
+      color: @gray;
+      font-size: .32rem;
+
+      &:nth-of-type(6n+1) {
+        margin-left: 2%;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
