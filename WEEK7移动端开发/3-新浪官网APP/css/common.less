@@ -6,3 +6,17 @@
   -webkit-transition: @arguments;
   transition: @arguments;
 }
+
+.center(@W,@H) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: unit(-@W/2, rem);
+  margin-top: unit(-@H/2, rem);
+}
+
+.subText() {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

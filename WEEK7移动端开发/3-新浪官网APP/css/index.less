@@ -15,7 +15,6 @@ html, body {
 .mainBox {
   margin: 0 auto;
   max-width: 640px;
-  background: #FFF;
 }
 
 /*--HEADER--*/
@@ -80,7 +79,122 @@ html, body {
   }
 }
 
+/*--BANNER--*/
+.bannerBox {
+  display: none;
+  position: relative;
+  height: 3.4rem;
 
+  .swiper-wrapper, .swiper-slide {
+    height: 100%;
+  }
+
+  .swiper-slide {
+    position: relative;
+    background: #CCC;
+
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      p {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        z-index: 1;
+        width: 100%;
+        height: .6rem;
+        line-height: .6rem;
+        text-indent: .2rem;
+
+        color: @white;
+        font-size: .28rem;
+        background: rgba(0, 0, 0, .5);
+      }
+    }
+  }
+
+  //=>修改SWIPER默认的样式(分析出它具备的样式类,然后我们自己重写即可)
+  .swiper-pagination {
+    position: absolute;
+    left: auto;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+
+    width: 1rem;
+    height: .6rem;
+    line-height: .6rem;
+    text-align: center;
+    font-size: .28rem;
+    color: rgba(255, 255, 255, 0.5);
+
+    span {
+      &:nth-of-type(1) {
+        font-weight: bold;
+        color: @white;
+      }
+    }
+  }
+}
+
+/*--LIVE--*/
+.liveBox {
+  display: none;
+  @H: .8rem;
+  position: relative;
+  margin: .16rem 0;
+  height: @H;
+  background: #FFF;
+
+  .tag {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1rem;
+    height: 100%;
+
+    &:after {
+      display: block;
+      content: '直播';
+
+      .center(.74, .4);
+      width: .74rem;
+      height: .4rem;
+      line-height: .4rem;
+      text-align: center;
+      color: @white;
+      font-size: .3rem;
+      background: #FA4E46;
+    }
+  }
+
+  .liveCon {
+    margin-left: 1rem;
+    height: @H;
+
+    .swiper-slide {
+      height: @H;
+      line-height: @H;
+
+      a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        font-size: .28rem;
+        color: @gray;
+        .subText;
+      }
+    }
+  }
+}
 
 
 
