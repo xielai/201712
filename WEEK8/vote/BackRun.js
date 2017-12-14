@@ -388,6 +388,6 @@ http.createServer((req, res)=> {
 
     //->404
     $.responseData(res, 'NOT FOUND!', 404, 'text/plain');
-}).listen(8888, function () {
-    console.log('在客户端浏览器中输入 http://localhost:8888/index.html 访问页面!');
+}).listen(1111, function () {
+    console.log('在客户端浏览器中输入 http://localhost:1111/index.html 访问页面!');
 });
