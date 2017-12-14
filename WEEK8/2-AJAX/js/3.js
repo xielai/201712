@@ -7,11 +7,11 @@
         //=>new Date()：获取的是客户端本机时间(会受到客户端自己调整时间的影响),重要的时间参考不能基于这个完成,不管是哪一个客户端都需要基于相同的服务器时间计算
         //=>每间隔1S中,我们需要把第一次获取的服务器时间进行累加
         serverTime = serverTime + 1000;
-        let tarTime = new Date('2017/12/14 13:12:20').getTime(),
+        let tarTime = new Date('2017/12/14 13:18:00').getTime(),
             spanTime = tarTime - serverTime;
 
         //=>2、计算差值中包含多少时分秒
-        if (spanTime < 0) {
+        if (spanTime <= 0) {
             //=>已经错过了抢购的时间(已经开抢了)
             box.innerHTML = '开抢啦！！';
             clearInterval(autoTimer);
@@ -21,7 +21,7 @@
         spanTime -= hours * 3600000;
         let minus = Math.floor(spanTime / (1000 * 60));
         spanTime -= minus * 60000;
-        let seconds = Math.floor(spanTime / 1000);
+        let seconds = Math.ceil(spanTime / 1000);
         hours < 10 ? hours = '0' + hours : null;
         minus < 10 ? minus = '0' + minus : null;
         seconds < 10 ? seconds = '0' + seconds : null;
