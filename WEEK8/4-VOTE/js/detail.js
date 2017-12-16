@@ -24,7 +24,6 @@ let detailRender = (function ($) {
         $headerBox.html(str);
     });
 
-
     //=>获取详细信息
     let queryData = function () {
         $.ajax({
@@ -39,8 +38,13 @@ let detailRender = (function ($) {
                     return;
                 }
                 //->ERROR:提示客户当前查询的客户信息不匹配,点击确定后,回到首页面(这块的需求有产品决定或者自己处理即可)
-                alert('您所查询的数据不匹配！');//=>真实项目中最好不要使用ALERT或者CONFIRM这些内置的弹出框(内置的太丑),有些APP会自动屏蔽ALERT
-                window.location.href = 'index.html';
+                /*alert('您所查询的数据不匹配！');//=>真实项目中最好不要使用ALERT或者CONFIRM这些内置的弹出框(内置的太丑),有些APP会自动屏蔽ALERT
+                 window.location.href = 'index.html';*/
+                Dialog.show('您所查询的数据不匹配!', {
+                    callBack: ()=> {
+                        window.location.href = 'index.html';
+                    }
+                });
             }
         });
     };
