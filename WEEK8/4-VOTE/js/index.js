@@ -67,24 +67,34 @@ let indexRender = (function ($) {
         });
     };
 
+    //=>搜索匹配
+    let searchFn = function () {
+        page = 1;//=>设置PAGE=1,重新展示搜索的内容
+        isLoading = true;//=>证明当前正在请求与搜索关键词匹配的数据(此时不进行下拉刷新等操作)
+        $userContainer.html('');//=>在展示新数据之前,先把容器中的老数据清空,这样后期才能在开始位置展示搜索的信息
+        queryData();
+    };
+
     return {
         init: function () {
             queryData();
 
             //=>下拉刷新
             $(window).on('scroll', ()=> {
-                if (isLoading) return;//=>数据正在加载中,滚动条滚动的时候不做任何的处理(避免数据重复加载)
-                if (page >= pageNum) return;//=>当前页码已经超过总页数,也没有数据可以供加载了,此时我们也不再加载新的数据
+                if (isLoading) return;
+                if (page >= pageNum) return;
 
                 let {scrollTop:scrollT, clientHeight:winH, scrollHeight:scrollH}=document.documentElement;
                 if (scrollT + winH + 100 >= scrollH) {
-                    //->快到当前页面底边界了(距离还有100PX)
-                    //->加载下一页的数据
                     isLoading = true;
                     page++;
                     queryData();
                 }
             });
+
+            //=>点击搜索
+            $searchBtn.tap(searchFn);
+            $input.on('input', searchFn);
         }
     }
 })(Zepto);
