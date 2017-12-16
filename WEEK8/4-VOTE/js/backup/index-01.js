@@ -10,14 +10,14 @@ let indexRender = (function ($) {
         limit = 10,//=>每页展示的数量
         page = 1,//=>当前页码
         pageNum = 0,//=>总页数
-        total = 0,//=>总数量
-        isLoading = true;//=>用来记录当前是否正在加载最新的数据 TRUE:正在加载 FALSE:已经加载完成
+        total = 0;//=>总数量
 
     //=>记录一些后续可能会用到的数据
     $plan.add(result=> {
         pageNum = result.pageNum;
         total = result.total;
 
+        //->判断是否获取到数据,从而控制列表或者提示的显示隐藏
         result['code'] == 0 ? ($userContainer.css('display', 'block'), $userTip.css('display', 'none')) : ($userContainer.css('display', 'none'), $userTip.css('display', 'block'));
     });
 
@@ -45,9 +45,8 @@ let indexRender = (function ($) {
                 </div>
             </li>`;
         });
+        //$userContainer.html($userContainer.html()+str); //=>它的原理是innerHTML,每一次操作都会把原有绑定的数据先当字符串拿出来,再和最新的拼接,最后整体存放进去(对原有已经绑定的有影响,性能消耗也比较大)
         $userContainer.append(str);
-
-        isLoading = false;//=>数据绑定完成让其变为FALSE代表加载完成
     });
 
     //=>通过AJAX获取需要的数据
@@ -60,7 +59,7 @@ let indexRender = (function ($) {
             data: {
                 limit: limit,
                 page: page,
-                search: $input.val(),
+                search: $input.val(),//=>搜索框中输入的内容
                 userId: 0
             },
             success: $plan.fire
@@ -70,21 +69,6 @@ let indexRender = (function ($) {
     return {
         init: function () {
             queryData();
-
-            //=>下拉刷新
-            $(window).on('scroll', ()=> {
-                if (isLoading) return;//=>数据正在加载中,滚动条滚动的时候不做任何的处理(避免数据重复加载)
-                if (page >= pageNum) return;//=>当前页码已经超过总页数,也没有数据可以供加载了,此时我们也不再加载新的数据
-
-                let {scrollTop:scrollT, clientHeight:winH, scrollHeight:scrollH}=document.documentElement;
-                if (scrollT + winH + 100 >= scrollH) {
-                    //->快到当前页面底边界了(距离还有100PX)
-                    //->加载下一页的数据
-                    isLoading = true;
-                    page++;
-                    queryData();
-                }
-            });
         }
     }
 })(Zepto);
