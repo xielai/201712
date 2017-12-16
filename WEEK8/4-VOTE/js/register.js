@@ -63,13 +63,42 @@ let registerRender = (function ($) {
         return true;
     };
 
-
     return {
         init: function () {
             $userName.on('blur', checkUserName);
             $userPhone.on('blur', checkPhone);
 
+            //=>提交注册信息
+            $submit.tap(function () {
+                //->把表单验证重新执行一遍
+                if (checkUserName() && checkPhone()) {
+                    $.ajax({
+                        url: '/register',
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            name: $userName.val().trim(),
+                            password: hex_md5($userPass.val().trim()),
+                            phone: $userPhone.val().trim(),
+                            bio: $userBio.val().trim(),
+                            sex: $man[0].checked ? 0 : 1
+                        },
+                        success: result=> {
+                            let {code, data}=result;
+                            if (code == 0) {
 
+                                return;
+                            }
+                            Dialog.show('很遗憾，注册失败了，请刷新后再试试吧！', {
+                                callBack: ()=> {
+                                    let nowUrl = location.href;
+                                    location.href = nowUrl;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         }
     }
 })(Zepto);
