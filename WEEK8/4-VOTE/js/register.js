@@ -13,8 +13,6 @@ let registerRender = (function ($) {
         $woman = $('#woman'),
         $submit = $('#submit');
 
-    let $plan = $.Callbacks();
-
     //=>用户名验证
     let checkUserName = ()=> {
         let reg = /^[\u4E00-\u9FA5]{2,10}(·[\u4E00-\u9FA5]{2,10})?$/;
@@ -63,42 +61,57 @@ let registerRender = (function ($) {
         return true;
     };
 
+    //=>提交
+    let $plan = $.Callbacks();
+    $plan.add(result=> {
+        let {code, data}=result;
+        if (code == 0) {
+            //=>注册成功
+            //1、把用户的基本信息存储在本地
+            localStorage.setItem('userInfo', JSON.stringify(data));
+            //2、提示注册成功,跳转回到首页面(有可能是跳转回到上一个页面)
+            Dialog.show('注册成功！', {
+                callBack: function () {
+                    location.href = 'index.html';
+
+                }
+            });
+            return;
+        }
+        Dialog.show('很遗憾，注册失败了，请刷新后再试试吧！', {
+            callBack: ()=> {
+                let nowUrl = location.href;
+                location.href = nowUrl;
+            }
+        });
+    });
+
+    let submitFn = ()=> {
+        //->把表单验证重新执行一遍
+        if (checkUserName() && checkPhone()) {
+            $.ajax({
+                url: '/register',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    name: $userName.val().trim(),
+                    password: hex_md5($userPass.val().trim()),
+                    phone: $userPhone.val().trim(),
+                    bio: $userBio.val().trim(),
+                    sex: $man[0].checked ? 0 : 1
+                },
+                success: $plan.fire
+            });
+        }
+    };
+
     return {
         init: function () {
             $userName.on('blur', checkUserName);
             $userPhone.on('blur', checkPhone);
 
             //=>提交注册信息
-            $submit.tap(function () {
-                //->把表单验证重新执行一遍
-                if (checkUserName() && checkPhone()) {
-                    $.ajax({
-                        url: '/register',
-                        type: 'post',
-                        dataType: 'json',
-                        data: {
-                            name: $userName.val().trim(),
-                            password: hex_md5($userPass.val().trim()),
-                            phone: $userPhone.val().trim(),
-                            bio: $userBio.val().trim(),
-                            sex: $man[0].checked ? 0 : 1
-                        },
-                        success: result=> {
-                            let {code, data}=result;
-                            if (code == 0) {
-
-                                return;
-                            }
-                            Dialog.show('很遗憾，注册失败了，请刷新后再试试吧！', {
-                                callBack: ()=> {
-                                    let nowUrl = location.href;
-                                    location.href = nowUrl;
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+            $submit.tap(submitFn);
         }
     }
 })(Zepto);
