@@ -147,5 +147,21 @@ let cookie = (function () {
 //     }
 // });
 
+/*--NAV--*/
+~function () {
+    let $mainBox = $('.mainBox');
+    $mainBox.length === 0 ? $mainBox = $('body') : null;
+
+    //=>创建NAV
+    let userInfo = localStorage.getItem('userInfo');
+    userInfo ? userInfo = JSON.parse(userInfo) : null;
+    $mainBox.prepend(`<nav class="navBox">
+        <a href="index.html">首页</a>
+        ${userInfo ? `<a href="detail.html">${userInfo.name}</a>
+        <a href="javascript:;">退出</a>` : `<a href="javascript:;">登录</a><a href="javascript:;">注册</a>`}
+    </nav>`);
+
+
+}();
 
 
