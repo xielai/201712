@@ -13,6 +13,10 @@ let indexRender = (function ($) {
         total = 0,//=>总数量
         isLoading = true;//=>用来记录当前是否正在加载最新的数据 TRUE:正在加载 FALSE:已经加载完成
 
+    //=>获取已经登录的信息
+    let userInfo = localStorage.getItem('userInfo');
+    userInfo = userInfo ? JSON.parse(userInfo) : {};
+
     //=>记录一些后续可能会用到的数据
     $plan.add(result=> {
         pageNum = result.pageNum;
@@ -41,7 +45,7 @@ let indexRender = (function ($) {
                 </a>
                 <div class="vote">
                     <span class="voteNum">${voteNum}</span>
-                    ${isVote == 1 ? `` : `<a href="javascript:;" class="voteBtn">投${sex == 0 ? `他` : `她`}一票</a>`}
+                    ${isVote == 1 ? `` : `<a href="javascript:;" class="voteBtn" data-id="${id}">投${sex == 0 ? `他` : `她`}一票</a>`}
                 </div>
             </li>`;
         });
@@ -49,6 +53,38 @@ let indexRender = (function ($) {
 
         isLoading = false;//=>数据绑定完成让其变为FALSE代表加载完成
     });
+
+    //=>投票操作
+    let voteFn = function (e) {
+        let $target = $(e.target);
+        if ($target.hasClass('voteBtn')) {
+            //=>验证是否登录
+            if (!userInfo.id) {
+                Dialog.show('请您先登录再投票!');
+                return;
+            }
+            $.ajax({
+                url: '/vote',
+                data: {
+                    userId: userInfo.id,
+                    participantId: $target.attr('data-id')
+                },
+                dataType: 'json',
+                cache: false,
+                success: result=> {
+                    let {code}=result;
+                    if (code != 0) {
+                        Dialog.show('投票失败!');
+                        return;
+                    }
+                    Dialog.show('感谢您的支持!');
+                    let $pre = $target.prev('span');
+                    $pre.html(parseFloat($pre.html()) + 1);
+                    $target.remove();
+                }
+            });
+        }
+    };
 
     //=>通过AJAX获取需要的数据
     let queryData = function () {
@@ -61,7 +97,7 @@ let indexRender = (function ($) {
                 limit: limit,
                 page: page,
                 search: $input.val(),
-                userId: 0
+                userId: userInfo.id || 0
             },
             success: $plan.fire
         });
@@ -78,6 +114,7 @@ let indexRender = (function ($) {
     return {
         init: function () {
             queryData();
+            $userContainer.tap(voteFn);
 
             //=>下拉刷新
             $(window).on('scroll', ()=> {

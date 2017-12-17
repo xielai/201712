@@ -95,7 +95,7 @@ let cookie = (function () {
             }
             if (this.isTap) {
                 //=>依赖ZEPTO
-                $(document).tap(e=> {
+                $('.markDialog').tap(e=> {
                     let target = e.target,
                         $target = $(target),
                         $par = $target.parent();
