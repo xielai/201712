@@ -8,7 +8,8 @@ let loginRender = (function ($) {
         localStorage.setItem('userInfo', JSON.stringify(data));
         Dialog.show('登录成功!', {
             callBack: function () {
-                location.href = 'index.html';//=>可能回到其它页面
+                let {history = encodeURIComponent('index.html')}=location.href.myQueryURLParameter();
+                location.href = decodeURIComponent(history);
             }
         });
     });

@@ -72,8 +72,8 @@ let registerRender = (function ($) {
             //2、提示注册成功,跳转回到首页面(有可能是跳转回到上一个页面)
             Dialog.show('注册成功！', {
                 callBack: function () {
-                    location.href = 'index.html';
-
+                    let {history = encodeURIComponent('index.html')}=location.href.myQueryURLParameter();
+                    location.href = decodeURIComponent(history);
                 }
             });
             return;

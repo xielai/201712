@@ -161,7 +161,31 @@ let cookie = (function () {
         <a href="javascript:;">退出</a>` : `<a href="javascript:;">登录</a><a href="javascript:;">注册</a>`}
     </nav>`);
 
+    //=>绑定点击事件
+    let $navBox = $('.navBox');
+    $navBox.tap(function (e) {
+        let target = e.target,
+            $target = $(target),
+            text = target.innerHTML;
+        if (target.tagName !== 'A') return;
 
+        if (text === '退出') {
+            //=>清空登录态
+            localStorage.removeItem('userInfo');
+            location.href = location.href;
+            return;
+        }
+
+        if (text === '登录' || text === '注册') {
+            //->获取当前页面的URL地址,跳转到具体某一个页面(登录或者注册),把地址当做参数值传递过去,登录或者注册成功,返回上一个页面即可
+            //->验证当前页面地址中是否已经包含history,如果包含了,我们直接把history的值带到下一个页面即可
+            let history = location.href,
+                flag = text === '登录' ? 'login' : 'register';
+            let isExit = location.href.myQueryURLParameter()['history'];
+            isExit ? history = decodeURIComponent(isExit) : null;
+            location.href = `${flag}.html?history=${encodeURIComponent(history)}`;
+        }
+    });
 }();
 
 
