@@ -122,7 +122,11 @@ let cookie = (function () {
         }
 
         removeMark() {
+            if (!this.sectionBox || !this.container) {
+                return;
+            }
             this.container.removeChild(this.sectionBox);
+            this.sectionBox = null;
 
             //=>移除后执行回调函数(把当前实例传递给回调函数)
             this.callBack(this);
