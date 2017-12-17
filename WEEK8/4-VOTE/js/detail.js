@@ -4,6 +4,9 @@ let detailRender = (function ($) {
 
     let $headerBox = $('.headerBox');
 
+    let userInfo = localStorage.getItem('userInfo');
+    userInfo = userInfo ? JSON.parse(userInfo) : {};
+
     //=>数据绑定
     $plan.add(result=> {
         let {id, name, picture, sex, phone, bio, isMatch, matchId, slogan, voteNum}=result;
@@ -22,6 +25,58 @@ let detailRender = (function ($) {
         <a href="javascript:;" class="voteBtn">投他一票</a>` : ``}
         `;
         $headerBox.html(str);
+    });
+
+    //=>进一步验证投他一票的按钮
+    $plan.add(result=> {
+        let $voteBtn = $headerBox.find('.voteBtn');
+        //->如果登录了,而且展示的是自己的信息,我们不能投票
+        if (userInfo.id == passId) {
+            $voteBtn.remove();
+            return;
+        }
+
+        //->当前这个人不是我,但是我已经投票了,也不再显示
+        if (userInfo.id != passId) {
+            $.ajax({
+                url: '/checkUser',
+                dataType: 'json',
+                data: {
+                    userId: userInfo.id,
+                    checkId: passId
+                },
+                success: result=> {
+                    result.isVote == 1 ? $voteBtn.remove() : null;
+                }
+            });
+        }
+
+        //->点击投票按钮投票
+        $voteBtn.tap(function () {
+            if (!userInfo.id) {
+                Dialog.show('请先登录!');
+                return;
+            }
+            $.ajax({
+                url: '/vote',
+                data: {
+                    userId: userInfo.id,
+                    participantId: passId
+                },
+                dataType: 'json',
+                cache: false,
+                success: result=> {
+                    if (result.code == 1) {
+                        Dialog.show('投票失败！');
+                        return;
+                    }
+                    Dialog.show('投票成功！');
+                    let $vote = $headerBox.find('.vote');
+                    $vote.html(parseFloat($vote.html()) + 1);
+                    $voteBtn.remove();
+                }
+            });
+        });
     });
 
     //=>获取详细信息
@@ -56,6 +111,10 @@ let detailRender = (function ($) {
             //window.location.href='xxx':在JS中让页面跳转到XXX页面(在本页面实现页面跳转,不是以新窗口跳转)
             //window.open('xxx'):这个也是JS中页面跳转的方式(基于新窗口打开页面,等价于A中 target='_blank')
             passId = window.location.href.myQueryURLParameter()['userId'];
+            if (userInfo.id) {
+                //=>已经登录了,但是如果passId没有,说明没有传递值,此时我们应该看的是自己的
+                !passId ? passId = userInfo.id : null;
+            }
 
             queryData();
         }
