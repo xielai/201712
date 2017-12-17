@@ -330,7 +330,7 @@ http.createServer((req, res)=> {
                     obj = {
                         id: item['id'],
                         name: item['name'],
-                        password: password
+                        password: passData['password']
                     };
                 }
             });
