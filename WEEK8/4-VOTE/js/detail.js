@@ -104,6 +104,57 @@ let detailRender = (function ($) {
         });
     };
 
+    //=>获取我投递的和投递我的
+    let voteInfoFn = function () {
+        //=>获取投递我的
+        let $voteMy = $('#voteMy'),
+            $voteMyList = $voteMy.find('.list');
+        $.ajax({
+            url: '/getVoteMy?userId=' + userInfo.id,
+            dataType: 'json',
+            success: result=> {
+                let {code, total, list}=result;
+                if (code != 0) return;
+                $voteMyList.html(bindHTML(list));
+                $voteMy.css('display', 'block');
+            }
+        });
+
+        //=>获取我投递的
+        let $myVote = $('#myVote'),
+            $myVoteList = $myVote.find('.list');
+        $.ajax({
+            url: '/getMyVote?userId=' + userInfo.id,
+            dataType: 'json',
+            success: result=> {
+                let {code, total, list}=result;
+                if (code != 0) return;
+                $myVoteList.html(bindHTML(list));
+                $myVote.css('display', 'block');
+            }
+        });
+    };
+
+    let bindHTML = function (data) {
+        let str = ``;
+        data.forEach(item=> {
+            let {id, name, picture, sex, matchId, slogan, voteNum, isVote}=item;
+            str += `<li>
+                <a href="detail.html?userId=${id}">
+                    <img src="${picture}" alt="" class="picture">
+                    <p class="title">${name}</p>
+                    <p class="bio">${slogan || ``}</p>
+                </a>
+                <div class="vote">
+                    ${matchId ? `<span class="voteNum">${voteNum}</span>
+                    ${isVote == 0 ? `<a href="javascript:;" class="voteBtn">投他一票</a>` : ``}
+                    ` : ``}
+                </div>
+            </li>`;
+        });
+        return str;
+    };
+
     return {
         init: function () {
             //=>获取地址栏中传递进来USER-ID的值
@@ -117,6 +168,11 @@ let detailRender = (function ($) {
             }
 
             queryData();
+
+            //=>展示我投票的和投递我的(个人中心)
+            if (userInfo.id == passId) {
+                voteInfoFn();
+            }
         }
     }
 })(Zepto);
